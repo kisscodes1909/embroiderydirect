@@ -1,0 +1,13 @@
+*** Tiered Pricing for WooCommerce ***
+
+2022-03-24 - version 1.0.1
+* ADDED - Filter to change the 'Pcs' label on frontend "wtp_change_tier_label" 
+* ADDED - IMPORT/EXPORT Teir pricing.
+* ADDED - Tooltip view.
+* ADDED - Summary Table.
+* ADDED - Hide price for Guest users.
+* ADDED - Price Display Settings.
+* FIXED - Variable product tier table.
+
+2021-06-17 - version 1.0.0
+* Initial release.

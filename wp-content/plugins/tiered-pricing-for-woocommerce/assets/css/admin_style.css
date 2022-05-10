@@ -1,0 +1,356 @@
+.wtp_actions {
+    cursor: pointer;
+}
+.bulk-row-main {
+    display: grid;
+    width: 100%;
+}
+.bulk-row-start {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 15px;
+}
+.bulk-row-inner > div {
+    display: inline-grid;
+    width: auto;
+    padding: 5px;
+}
+.bulk-row-start div {
+    padding: 5px;
+    display: table-cell;
+    width: 150px;
+    vertical-align: top;
+}
+.dashicons-menu {
+    color: darkgray !important;
+}
+.wtp-sort-icon {
+    padding-top: 12px !important;
+}
+.wtp-input-filed-hight input {
+    height: 34px !important;
+}
+.wtp_desc_text {
+    color: darkgray;
+    display: inline-block;
+    font-size: 12px;
+    float: left;
+    padding-top: 5px;
+}
+.wtp-input-filed-hight input {
+    height: 34px !important;
+    width: 75%!important;
+}
+.wtp-select-filed-hight select {
+    height: 34px;
+    width: 80%!important;
+}
+.wp-core-ui select {
+    font-size: 14px;
+    line-height: 2;
+    color: #32373c;
+    border-color: #7e8993;
+    box-shadow: none;
+    border-radius: 3px;
+    padding: 0 24px 0 8px;
+    min-height: 30px;
+    max-width: 25rem;
+    -webkit-appearance: none;
+    background: #fff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E) no-repeat right 5px top 55%;
+    background-size: 16px 16px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.wtp-btn-remove .wtp_discount_remove,
+.wtp-btn-remove .wtp_variation_discount_remove {
+    color: #fff;
+    background-color: #d9534f;
+    border-radius: 3px;
+}
+.wtp-discount-add-row {
+    padding-left: 14px;
+}
+.add-condition-and-filters {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+div#wtp_product_discount_meta {
+    padding: 20px 0;
+}
+.wtp-addtext{
+    background: #f5f5f5;
+    margin: 15px!important;
+    font-weight: bold;
+    color: #000;
+    padding: 10px!important;
+    border-left: 5px solid lightblue;
+}
+.wdbq_discount_remove {
+    cursor: pointer;
+}
+div#wtp_product_variation_discount_meta {    
+    width: 100%!important;
+    display: block!important;
+    background: #fff;
+    padding: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.wtp-panel-title {
+    font-size: 24px!important;
+    font-weight: bold;
+    margin: 0 0 20px 0!important;
+    margin: 0!important
+}
+.wtp-form-control {
+    padding: 10px 0;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: right;
+}
+.wtp-leftSide {
+    min-width: 200px;
+}
+.wtp-rightSide {
+    width: 100%;
+}
+.wtp-leftSide label {
+    font-weight: 500;
+    font-size: 14px;
+    font-family: sans-serif;
+    border-bottom: 1px solid #777;
+    color: #777;
+    padding-bottom: 3px;
+}
+.wtp-tighed {
+    display: flex;
+    flex-direction: row;
+}
+.wtp-form-control input[type="text"], .wtp-form-control select, .wtp-form-control input[type="file"] {
+    width: 100%!important;
+    padding: 6px 12px;
+    border: 1px solid #bbb;
+    font-size: 14px;
+    font-family: sans-serif;
+    max-width: 25rem;
+    min-height: 42px;
+    border-radius: 4px;
+    margin: 0;
+    line-height: 2;
+}
+.wtp-form-control-field {
+    width: 100%!important;
+    padding: 6px 12px!important;
+    border: 1px solid #bbb!important;
+    font-size: 14px!important;
+    font-family: sans-serif!important;
+    max-width: 25rem!important;
+    min-height: 42px!important;
+    border-radius: 4px!important;
+    margin: 0!important;
+    line-height: 2!important;
+}
+.wtp-form-control-textarea {
+    width: 100%!important;
+    padding: 6px 12px!important;
+    border: 1px solid #bbb!important;
+    font-size: 14px!important;
+    font-family: sans-serif!important;
+    max-width: 25rem!important;
+    height: 80px!important;
+    resize: none!important;
+}
+.wtp-form-control textarea {
+    width: 100%!important;
+    padding: 6px 12px;
+    border: 1px solid #bbb;
+    font-size: 14px;
+    font-family: sans-serif;
+    max-width: 25rem;
+    height: 80px;
+    resize: none;
+}
+.wtp-field-response {
+    display: block;
+    font-size: 11px;
+    color: #777;
+    max-width: 25rem;
+    margin-top: 7px;
+}
+.wtp-content-body {
+    background: #FFF;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0px 1px 6px 0px rgb(0 0 0 / 25%);
+    -webkit-box-shadow: 0px 1px 6px 0px rgb(0 0 0 / 25%);
+    -moz-box-shadow: 0px 1px 6px 0px rgb(0 0 0 / 25%);
+    -ms-box-shadow: 0px 1px 6px 0px rgb(0 0 0 / 25%);
+    -o-box-shadow: 0px 1px 6px 0px rgb(0 0 0 / 25%);
+}
+.wtp-button {
+    background: #429cb9!important;
+    border: 1px solid #429cb9!important;
+    width: 150px!important;
+    border-radius: 4px!important;
+    margin-left: 0!important;
+    color: #FFF!important;
+    font-weight: bold!important;
+    cursor: pointer!important;
+    transition: all 0.5s ease 0s!important;
+    height:  42px!important;
+    line-height: 42px!important;
+}
+.wtp-form-control button {
+    background: #429cb9;
+    border: 1px solid #429cb9;
+    width: 150px;
+    border-radius: 4px;
+    margin-left: 20px;
+    color: #FFF;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.5s ease 0s;
+}
+.wtp-form-control button:hover {
+    background-color:  #3694b3;
+    border-color:  #3694b3;
+}
+.wtp-overlay {
+    position:  fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../images/loading.gif') rgba(255, 255, 255, 0.5) center center no-repeat;
+    background-size:  150px;
+    z-index: 9999;
+}
+.wtp-alert {
+    font-size: x-small!important;
+}
+.wtp-alert-danger {
+    color: #ff0000!important;
+}
+button.woocommerce-save-button {
+    visibility: hidden;
+}
+/* .focusout {
+   filter:  blur(2px);
+   -webkit-filter:  blur(2px);
+   -moz-filter:  blur(2px);
+} */
+.focusin {
+    border-top: 1px solid #56d0bf!important;
+    border-bottom: 1px solid #56d0bf!important;
+}
+.edit-field {
+    border:  1px solid #56d0bf!important;
+}
+ul.wtp-inside-subtabs {
+    margin:  15px 0!important;
+}
+.wtp-show-table {
+    display: table!important;
+}
+.woocommerce table.form-table .forminp-radio ul li {
+    display: inline-block;
+    margin-right: 25px;
+}
+/**Drag & Drop css start */
+.drop-zone {
+  max-width: 340px;
+  height: 175px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  cursor: pointer;
+  color: #cccccc;
+  border: 2px dashed #999;
+  border-radius: 10px;
+}
+
+.drop-zone--over {
+  border-style: solid;
+}
+
+.drop-zone__input {
+  display: none;
+}
+
+.drop-zone__thumb {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #cccccc;
+  background-size: cover;
+  position: relative;
+}
+
+.drop-zone__thumb::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 5px 0;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.75);
+  font-size: 14px;
+  text-align: center;
+}
+strong.wtp-note {
+    display: block;
+    max-width: 384px;
+    padding: 8px;
+    background: #E9EBEE;
+    border-radius: 4px;
+    color: #333;
+    font-size: 12px;
+}
+/**Drag & Drop css end */
+
+.alert {
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+.alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+.alert-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+.alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+div#wtp_message {
+    margin: 1rem 0;
+    max-width: 400px;
+}
+span#wtp_sample_csv {
+    display: none;
+    margin: 8px 0 0 0;
+    font-size: 13px;
+    color: #777;
+}
+span#wtp_sample_csv a{
+    font-weight: 600;
+}
