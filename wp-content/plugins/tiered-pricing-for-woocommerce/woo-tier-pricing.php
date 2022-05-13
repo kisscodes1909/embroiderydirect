@@ -81,6 +81,79 @@ if ( wtp_woocommerce_active_check() ) {
 	add_action( 'wp_ajax_wtp_calculate_summary', 'wtp_calculate_summary' );
 	add_action( 'wp_ajax_nopriv_wtp_calculate_summary', 'wtp_calculate_summary' );
 
+	add_action( 'wp_ajax_wtp_add_to_cart', 'wtp_addToCart' );
+	add_action( 'wp_ajax_nopriv_wtp_add_to_cart', 'wtp_addToCart' );
+
+	add_filter('woocommerce_add_to_cart_handler', 'custom_variable_handler', 10, 2);
+	add_action('woocommerce_add_to_cart_handler_custom-variable', 'custom_variable_add_to_cart');
+
+	function custom_variable_handler($type, $product) {
+		if ( 'variable' === $type || 'variation' === $type ) {
+			return 'custom-variable';
+		}
+		return $type;
+	}
+
+	function custom_variable_add_to_cart($url) {
+		$product_id        = apply_filters( 'woocommerce_add_to_cart_product_id', absint( wp_unslash( $_REQUEST['add-to-cart'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		
+		if ( ! $product_id ) {
+			return;
+		}
+
+		if( ! isset($_REQUEST['qtyNumber'])) return;
+
+		$variations = $_POST['qtyNumber'];
+
+		$passed_validation = apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, 1);
+
+		if ( ! $passed_validation ) {
+			return false;
+		}
+
+		foreach($variations as $variation_id => $qty) {
+			if( empty($qty) ) continue;
+			$product    = wc_get_product( $product_id );
+			$variation  = $product->get_variation_attributes();
+
+			if ( false !== WC()->cart->add_to_cart( $product_id, $qty, $variation_id, $variation ) ) {
+				wc_add_to_cart_message( array( $variation_id => $qty ), true );
+			}
+
+		}
+
+		if ( 0 === wc_notice_count( 'error' ) ) {
+			if ( $url ) {
+				wp_safe_redirect( $url );
+				exit;
+			} elseif ( 'yes' === get_option( 'woocommerce_cart_redirect_after_add' ) ) {
+				wp_safe_redirect( wc_get_cart_url() );
+				exit;
+			}
+		}
+	}
+
+	function wtp_addToCart() {
+		if ( ! isset( $_POST['product_id'] ) ) {
+			return;
+		}
+
+		if( ! isset($_POST['qtyNumber'])) return;
+
+		$product_id = apply_filters( 'woocommerce_add_to_cart_product_id', absint( $_POST['product_id'] ) );
+		$variations = $_POST['qtyNumber'];
+
+		foreach($variations as $variation_id => $qty) {
+			if( empty($qty) ) continue;
+			$product    = wc_get_product( $product_id );
+			$variation  = $product->get_variation_attributes();
+			WC()->cart->add_to_cart( $product_id, $qty, $variation_id, $variation );
+		}
+
+		WC_AJAX::get_refreshed_fragments();
+
+	}
+
 	function wtp_add_action_links( $actions ) {
 		
 		$mylinks = array(

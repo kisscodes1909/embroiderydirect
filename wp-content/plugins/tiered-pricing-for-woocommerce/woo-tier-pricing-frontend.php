@@ -35,18 +35,25 @@ function wtp_front_scripts() {
 
 		wp_enqueue_style( 'wtp-front-style', WTP_ROOT_URL . 'assets/css/front_style.css', array(), '1.0.0&t=' . gmdate( 'dmYhis' ) );
 
-		wp_enqueue_script( 'wtp-tippy-popper', 'https://unpkg.com/@popperjs/core@2', array( 'jquery' ), WTP_VERSION, true );
-		wp_enqueue_script( 'wtp-tippy', 'https://unpkg.com/tippy.js@6', array( 'jquery', 'wtp-tippy-popper' ), WTP_VERSION, true );
+		//wp_enqueue_script( 'wtp-tippy-popper', 'https://unpkg.com/@popperjs/core@2', array( 'jquery' ), WTP_VERSION, true );
+		//wp_enqueue_script( 'wtp-tippy', 'https://unpkg.com/tippy.js@6', array( 'jquery', 'wtp-tippy-popper' ), WTP_VERSION, true );
 
 		$params = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 'wtp_front' ),
 			'summary' => get_option( 'wtp_summary_display_type', 'none' )
 		);
-		wp_register_script( 'wtp-front-script', WTP_ROOT_URL . 'assets/js/front_script.js', array( 'jquery', 'wtp-tippy' ), '1.0.0&t=' . gmdate( 'dmYhis' ), true );
-		wp_localize_script( 'wtp-front-script', 'wtp_front_script', $params );
+		//wp_register_script( 'wtp-front-script', WTP_ROOT_URL . 'assets/js/front_script.js', array( 'jquery', 'wtp-tippy' ), '1.0.0&t=' . gmdate( 'dmYhis' ), true );
+		wp_register_script( 'wtp-PaSize', WTP_ROOT_URL . 'assets/js/frontPaSize.js', array( 'jquery' ), '1.0.0&t=' . gmdate( 'dmYhis' ), true );
 
-		wp_enqueue_script( 'wtp-front-script' );
+		//wp_localize_script( 'wtp-front-script', 'wtp_front_script', $params );
+
+		wp_localize_script( 'wtp-PaSize', 'wtp_PaSize_script', $params );
+
+
+		//wp_enqueue_script( 'wtp-front-script' );
+		wp_enqueue_script( 'wtp-PaSize' );
+
 
 	}
 }
@@ -134,7 +141,6 @@ if ( 'enabled' === get_option( 'wtp_hide_price', 'disabled' ) && ! is_user_logge
 	if ( 'enabled' === get_option( 'wtp_tier_range_price_show', 'disabled' ) && ! is_admin() ) {		
 		add_filter( 'woocommerce_get_price_html', 'wtp_tier_price_range', 99, 2 );
 		function wtp_tier_price_range( $price, $product ) {
-
 			if ( 'variation' == $product->get_type() || 'variable' == $product->get_type() || 'variable-subscription' == $product->get_type() || 'grouped' == $product->get_type() ) {
 				return $price;
 			}
@@ -338,7 +344,7 @@ if ( 'enabled' === get_option( 'wtp_hide_price', 'disabled' ) && ! is_user_logge
 		}
 	}
 
-	add_action( get_option( 'wtp_table_position', 'woocommerce_before_add_to_cart_button' ), 'wtp_product_discount_list_preview', 99 );
+	//add_action( get_option( 'wtp_table_position', 'woocommerce_before_add_to_cart_button' ), 'wtp_product_discount_list_preview', 99 );
 	// Showing discount list & discount calculated depends on setting.
 	function wtp_product_discount_list_preview() {
 		global $post;
@@ -370,7 +376,7 @@ if ( 'enabled' === get_option( 'wtp_hide_price', 'disabled' ) && ! is_user_logge
 			$hide_class = '';
 		}
 
-		if ( ! ( 'grouped' == $product->get_type() ) && ! ( 'variable' == $product->get_type() ) && ! ( 'variation' == $product->get_type() ) && ! ( 'variable-subscription' == $product->get_type() ) ) {
+		if ( ! ( 'grouped' == $product->get_type() ) && ( 'variable' == $product->get_type() ) && ! ( 'variation' == $product->get_type() ) && ! ( 'variable-subscription' == $product->get_type() ) ) {
 
 			// echo '<pre>$product$product';
 			// print_r( $product );
@@ -380,10 +386,10 @@ if ( 'enabled' === get_option( 'wtp_hide_price', 'disabled' ) && ! is_user_logge
 			$price                    = $product->get_price();
 			$wtp_product_tier_setting = get_post_meta( $post_id, 'wtp_product_tier_setting', true );
 
+
 			// echo '<pre>$wtp_product_tier_setting$wtp_product_tier_setting';
 			// print_r( $wtp_product_tier_setting );
 			// echo '</pre>';
-
 			if ( ! empty( $wtp_product_tier_setting ) && in_array( 'false', $wtp_product_tier_setting['disabled'] ) ) { // Product based tier pricing.
 				?>
 				<div id="wtp-tier-data" class="<?php echo esc_attr( $hide_class ); ?>">
@@ -396,7 +402,7 @@ if ( 'enabled' === get_option( 'wtp_hide_price', 'disabled' ) && ! is_user_logge
 							$wtp_table = '';
 						}
 						?>
-						<ul class="<?php echo esc_attr( $wtp_table ); ?>">
+						<ul class="<?php echo esc_attr( $wtp_table );  ?>">
 							<?php
 							if ( 'tooltip' === get_option( 'wtp_display_type', 'block' ) ) {
 								?>
@@ -518,23 +524,16 @@ if ( 'enabled' === get_option( 'wtp_hide_price', 'disabled' ) && ! is_user_logge
 										} else { // fixed
 											$discount_value = ( $price - $discount_value );
 										}
+										$show_discount_percentage = 100 - ( ( $discount_value / $price ) * 100 );
 
 										$discount_value = ( $discount_value >= 0 ) ? $discount_value : 0;
 										if ( 'incl' == get_option( 'woocommerce_tax_display_shop' ) ) {
 											$discount_value = wc_get_price_including_tax( $product, array( 'price' => $discount_value ) );
-										}
-										?>
+										}										?>
 										<li data-min="<?php echo esc_attr( $min_qty ); ?>" data-max="<?php echo esc_attr( $data_max_qty ); ?>" data-price="<?php echo esc_attr( $discount_value ); ?>">
-											<span class="ma-quantity-range"><?php echo esc_html__( apply_filters( 'wtp_change_tier_label', 'Pcs' ), 'wtp' ) . ' ' . esc_attr( $min_qty ) . ' - ' . esc_attr( $max_qty ); ?></span>
+											<span class="ma-quantity-range"><?php echo esc_attr( $min_qty ) . ' - ' . esc_attr( $max_qty ) . ' ' . esc_html__( apply_filters( 'wtp_change_tier_label', 'Items' ), 'wtp' ); ?></span>
 											<span class="pre-inquiry-price"><?php echo wp_kses_post( wc_price( $discount_value ) ); ?></span>
-											<?php
-											if ( 'tooltip' === get_option( 'wtp_display_type', 'block' ) && 'enabled' === get_option( 'wtp_show_discount_col', 'disabled' ) ) {
-												$show_discount_percentage = 100 - ( ( $discount_value / $price ) * 100 );
-												?>
-												<span><?php echo sprintf( '%1$s%2$s', esc_attr( number_format( $show_discount_percentage, 2 ) ), esc_html__( '% OFF', 'wtp' ) ); ?></span>
-												<?php
-											}
-											?>
+											<span class="save-value"><?php echo sprintf( '%1$s%2$s', esc_attr( number_format( $show_discount_percentage, 2 ) ), esc_html__( '% OFF', 'wtp' ) ); ?></span>
 										</li>
 										<?php
 									}
@@ -1045,6 +1044,8 @@ function wtp_product_alter_price_cart( $cart ) {
 		return;
 	}
 
+	$parentProductQuantities = getParentProductQuantities($cart->get_cart_item_quantities());
+
 	// LOOP THROUGH CART ITEMS & APPLY DISCOUNT.
 	foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
 		$product      = $cart_item['data'];
@@ -1052,8 +1053,14 @@ function wtp_product_alter_price_cart( $cart ) {
 		$variation_id = $cart_item['variation_id'];
 		$price        = $product->get_price();
 		$type         = $product->get_type();
-		$quantity     = $cart_item['quantity'];
+		//$quantity     = $cart_item['quantity'];
+
+		// Apply total variation product quantity 
+		$quantity     = $parentProductQuantities[$product_id];
+
 		$new_price    = (string) wtp_calculator_product( $product_id, $price, $quantity, $type, $variation_id );
+
+		//$new_price = 5;
 
 		if ( '' != $new_price ) {
 			$cart_item['data']->set_price( $new_price );
@@ -1063,7 +1070,30 @@ function wtp_product_alter_price_cart( $cart ) {
 			$cart_item['data']->set_price( $price );
 		}
 	}
+
+
+
 }
+
+function getParentProductQuantities($cartItemQuantities) {
+	$productQuantities = [];
+
+	foreach($cartItemQuantities as $product_id => $quantity) {
+		$product           = wc_get_product( $product_id );
+		
+		// Calculate parent quantity product
+		if ( $product && 'variation' === $product->get_type() ) {
+			$productQuantities[$product->get_parent_id()] = $productQuantities[$product->get_parent_id()] + $quantity;
+		} else {
+			$productQuantities[$product_id] = $quantity;
+		}
+
+	}
+	return $productQuantities;
+}
+
+// totalQty(WC()->cart->get_cart_item_quantities());
+
 
 
 // Show discount price on cart line product price
@@ -1320,3 +1350,5 @@ function wtp_calculator_product( $product_id, $price, $quantity, $type, $variati
 		}
 	}
 }
+// Add discount the price
+add_action('woocommerce_single_product_summary', 'wtp_product_discount_list_preview', 12);
