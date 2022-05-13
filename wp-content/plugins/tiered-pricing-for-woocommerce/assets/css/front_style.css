@@ -154,3 +154,31 @@ div[data-tippy-root] {
 div[data-tippy-root]:last-child {
     display: block!important;
 }
+
+#paSizeUI .pa-size-ui-item {
+	display: flex;
+	justify-content:space-between;
+	align-items: center;
+}
+
+#paSizeUI .pa-size-ui-item + .pa-size-ui-item {
+	margin-top: 10px
+}
+
+#paSizeUI .pa-size-ui-item-label {
+	text-transform: uppercase;
+	font-weight:bold;
+}
+
+#paSizeUI input.pa-size-ui-item-qty {
+	width: 60px;
+	margin:0;
+}
+
+#paSizeUI {
+	margin-bottom: 20px
+}
+
+.single_variation_wrap .thwepo-field {
+    padding: 5px 0;
+}

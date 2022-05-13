@@ -408,8 +408,6 @@ class WC_AJAX {
 		$variation_id      = 0;
 		$variation         = array();
 
-		print_r($_POST);die;
-
 		if ( $product && 'variation' === $product->get_type() ) {
 			$variation_id = $product_id;
 			$product_id   = $product->get_parent_id();
