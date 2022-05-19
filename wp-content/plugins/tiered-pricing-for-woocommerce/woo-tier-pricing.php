@@ -1,13 +1,12 @@
 <?php
 /**
  * Plugin Name: Tiered Pricing For WooCommerce
- * Plugin URI: https://wpexperts.io/
  * Description: Tiered Pricing for WooCommerce is a powerful strategy that allows you to create pricing tiers on each store level. Each pricing tier will enable you to create rules that help you define the quantity range (minimum and maximum) along with the type of discount it offers (fixed or percentage).
- * Version: 1.0.1
- * Author: wpexpertsio
- * Author URI: https://wpexperts.io/
+ * Version: 2.0
+ * Author: kisscodes1909	
+ * Author URI: https://kisscodes.net/
  * Developer: wpexpertsio
- * Developer URI: https://wpexperts.io/
+ * Developer URI: https://kisscodes.net/
  * Text Domain: tiered-pricing-for-woocommerce
  * 
  * Woo: 8354233:fbeec76c92b0c05ff10d952d84c99e2d
