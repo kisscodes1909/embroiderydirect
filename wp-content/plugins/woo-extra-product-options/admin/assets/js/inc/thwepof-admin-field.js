@@ -183,7 +183,7 @@ var thwepof_settings_field = (function($, window, document) {
 		form.find(':input').attr("disabled", false);
 		form.find('tr').removeClass('disabled');
 
-		if(type === 'hidden' || type === 'heading' || type === 'paragraph'){
+		if(type === 'hidden' || type === 'heading' || type === 'paragraph' || type === 'separator'){
 			thwepof_base.form_wizard_disable_tab(popup, 1);
 		}if(type === 'checkbox'){
 			disable_field(form, 'select', 'title_position');

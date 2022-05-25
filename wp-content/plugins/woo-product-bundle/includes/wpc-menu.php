@@ -13,16 +13,16 @@ if ( ! class_exists( 'WPCleverMenu' ) ) {
 				'WPClever⚡',
 				'manage_options',
 				'wpclever',
-				array( &$this, 'welcome_content' ),
+				array( $this, 'welcome_content' ),
 				WPC_URI . 'assets/images/wpc-icon.svg',
 				26
 			);
-			add_submenu_page( 'wpclever', 'About', 'About', 'manage_options', 'wpclever' );
+			add_submenu_page( 'wpclever', 'WPC About', 'About', 'manage_options', 'wpclever' );
 		}
 
 		function welcome_content() {
 			?>
-            <div class="wpclever_welcome_page wrap">
+            <div class="wpclever_page wpclever_welcome_page wrap">
                 <h1>WPClever | Make clever moves</h1>
                 <div class="card">
                     <h2 class="title">About</h2>
@@ -77,14 +77,18 @@ if ( ! class_exists( 'WPCleverMenu' ) ) {
 						array_multisort( array_column( $plugins_arr, 'active_installs' ), SORT_DESC, $plugins_arr );
 						$i = 1;
 
+						echo '<div class="wpclever_plugins_wrapper">';
+
 						foreach ( $plugins_arr as $pl ) {
 							if ( strpos( $pl['name'], 'WPC' ) === false ) {
 								continue;
 							}
 
-							echo '<div class="item"><a href="https://wordpress.org/plugins/' . $pl['slug'] . '/"><span class="num">' . $i . '</span><span class="title">' . $pl['name'] . '</span><br/><span class="info">Version ' . $pl['version'] . '</span></a></div>';
+							echo '<div class="item"><a href="' . esc_url( 'https://wordpress.org/plugins/' . $pl['slug'] . '/' ) . '" target="_blank"><span class="num">' . esc_html( $i ) . '</span><span class="title">' . esc_html( $pl['name'] ) . '</span><br/><span class="info">Version ' . esc_html( $pl['version'] ) . '</span></a></div>';
 							$i ++;
 						}
+
+						echo '</div>';
 					} else {
 						echo 'https://wpclever.net';
 					}

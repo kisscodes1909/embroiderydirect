@@ -130,6 +130,15 @@ class Rest extends WP_REST_Controller {
 				'permission_callback' => [ $this, 'has_permission' ],
 			]
 		);
+		register_rest_route(
+			$this->namespace,
+			'/deleteTrackedKeywords',
+			[
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'delete_all_tracked_keywords' ],
+				'permission_callback' => [ $this, 'has_permission' ],
+			]
+		);
 
 		register_rest_route(
 			$this->namespace,
@@ -361,6 +370,28 @@ class Rest extends WP_REST_Controller {
 		// Send total keywords count to RankMath.
 		$total_keywords = Keywords::get()->get_tracked_keywords_count();
 		$response       = \RankMathPro\Admin\Api::get()->keywords_info( $registered['username'], $registered['api_key'], $total_keywords );
+		if ( $response ) {
+			update_option( 'rank_math_keyword_quota', $response );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Delete all the manually tracked keywords.
+	 */
+	public function delete_all_tracked_keywords() {
+
+		// Delete all keywords.
+		Keywords::get()->delete_all_tracked_keywords();
+
+		$registered = Admin_Helper::get_registration_data();
+		if ( empty( $registered['username'] ) || empty( $registered['api_key'] ) ) {
+			return false;
+		}
+
+		// Send total keywords count as 0 to RankMath.
+		$response = \RankMathPro\Admin\Api::get()->keywords_info( $registered['username'], $registered['api_key'], 0 );
 		if ( $response ) {
 			update_option( 'rank_math_keyword_quota', $response );
 		}

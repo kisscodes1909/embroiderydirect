@@ -236,3 +236,53 @@ form.cart table.thwepo-extra-options input.thwepof-colorpicker {
     border-right: 5px solid transparent;
     border-bottom: 5px solid grey;
 }
+
+/*
+ * Switch input 
+ */
+
+.thwepof-switch-input {
+    position: relative;
+}
+.thwepof-switch-label {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 33px;
+    height: 10px;
+    background: grey;
+    display: block !important;
+    border-radius: 100px;
+    position: relative;
+}
+.thwepof-switch-label:after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -8px;
+    width: 20px;
+    height: 20px;
+    background: grey;
+    border-radius: 50%;
+    transition: .1s;
+}
+.thwepof-switch-input input:checked+.thwepof-switch-label {
+    background: #2773aa;
+}
+.thwepof-switch-input input:checked+.thwepof-switch-label:after {
+    left: calc(100% + 8px);
+    transform: translateX(-100%);
+    background: #2672a9;
+}
+.thwepof-switch-input .thwepof-input-field {
+    height: 1px;
+    width: 1px;
+    opacity: 0;
+    border: 0;
+    box-shadow: none;
+    position: absolute;
+    bottom: 0px;
+}
+.thwepof-seperator {
+    min-height: 1px;
+    border: 0.5px dashed #959595;
+}

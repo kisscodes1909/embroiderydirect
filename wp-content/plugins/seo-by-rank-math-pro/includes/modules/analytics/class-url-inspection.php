@@ -29,6 +29,9 @@ class Url_Inspection {
 		$this->action( 'rank_math/analytics/get_inspections_query', 'add_filter_params', 10, 2 );
 		$this->action( 'rank_math/analytics/get_inspections_count_query', 'add_filter_params', 10, 2 );
 		$this->filter( 'rank_math/analytics/post_data', 'add_index_verdict_data', 10, 2 );
+
+		// Enqueue.
+		$this->action( 'rank_math/admin/enqueue_scripts', 'enqueue_scripts' );
 	}
 
 	/**
@@ -96,5 +99,34 @@ class Url_Inspection {
 
 		$data['indexStatus'] = DB::get_index_verdict( $data['page'] );
 		return $data;
+	}
+
+	/**
+	 * Enqueue scripts.
+	 */
+	public function enqueue_scripts() {
+		$screen = get_current_screen();
+		if ( 'rank-math_page_rank-math-analytics' !== $screen->id ) {
+			return;
+		}
+
+		$submit_url = add_query_arg(
+			[
+				'page'        => 'instant-indexing',
+				'tab'         => 'console',
+				'apiaction'   => 'update',
+				'_wpnonce'    => wp_create_nonce( 'giapi-action' ),
+				'apipostid[]' => '',
+
+			],
+			admin_url( 'admin.php' )
+		);
+		$settings = get_option( 'rank-math-options-instant-indexing', [] );
+
+		Helper::add_json( 'instantIndexingSupport', [
+			'isPluginActive'     => is_plugin_active( 'fast-indexing-api/instant-indexing.php' ),
+			'isGoogleConfigured' => ! empty( $settings['json_key'] ),
+			'submitUrl'          => $submit_url,
+		] );
 	}
 }

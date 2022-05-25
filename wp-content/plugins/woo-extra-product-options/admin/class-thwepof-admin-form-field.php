@@ -39,8 +39,10 @@ class THWEPOF_Admin_Form_Field extends THWEPOF_Admin_Form{
 			'radio'         => __('Radio Button', 'woo-extra-product-options'),
 			'datepicker'    => __('Date Picker', 'woo-extra-product-options'),
 			'colorpicker'   => __('Colorpicker', 'woo-extra-product-options'),
+			'switch'        => __('Switch', 'woo-extra-product-options'),
 			'heading'       => __('Heading', 'woo-extra-product-options'),
-			'paragraph'     => __('Paragraph', 'woo-extra-product-options')
+			'paragraph'     => __('Paragraph', 'woo-extra-product-options'),
+			'separator'     => __('Separator', 'woo-extra-product-options')
 		);
 	}
 
@@ -264,8 +266,10 @@ class THWEPOF_Admin_Form_Field extends THWEPOF_Admin_Form{
 		$this->render_form_field_checkboxgroup();
 		$this->render_form_field_datepicker();
 		$this->render_form_field_colorpicker();
+		$this->render_form_field_switch();
 		$this->render_form_field_heading();
 		$this->render_form_field_paragraph();
+		$this->render_form_field_separator();
 		
 		$this->render_field_form_fragment_product_list();
 		$this->render_field_form_fragment_category_list();
@@ -514,6 +518,24 @@ class THWEPOF_Admin_Form_Field extends THWEPOF_Admin_Form{
         </table>
         <?php   
 	}
+
+	private function render_form_field_switch(){
+		$prop_value = $this->field_props['value'];
+		$prop_value['label'] = __('Value', 'woo-extra-product-options');
+
+		?>
+        <table id="thwepof_field_form_id_switch" class="thwepo_pp_table" style="display:none;">
+            <?php
+			$this->render_form_elm_row($this->field_props['title']);
+			$this->render_form_elm_row($prop_value);			
+
+			$this->render_form_elm_row_cb($this->field_props['checked']);
+			$this->render_form_elm_row_cb($this->field_props['required']);
+			$this->render_form_elm_row_cb($this->field_props['enabled']);
+			?>
+        </table>
+        <?php   
+	}
 	
 	private function render_form_field_checkboxgroup(){
 
@@ -620,6 +642,17 @@ class THWEPOF_Admin_Form_Field extends THWEPOF_Admin_Form{
 			$this->render_form_elm_row($prop_value);
 			$this->render_form_elm_row($this->field_props['cssclass']);
 
+			$this->render_form_elm_row_cb($this->field_props['enabled']);
+			?>
+        </table>
+        <?php  
+	}
+
+	private function render_form_field_separator(){
+		?>
+        <table id="thwepof_field_form_id_separator" class="thwepo_pp_table" style="display:none;">
+			<?php
+			$this->render_form_elm_row($this->field_props['cssclass']);
 			$this->render_form_elm_row_cb($this->field_props['enabled']);
 			?>
         </table>

@@ -166,6 +166,13 @@ class Keywords {
 	}
 
 	/**
+	 * Delete all the manually tracked keywords.
+	 */
+	public function delete_all_tracked_keywords() {
+		DB::keywords()->delete();
+		delete_transient( Stats::get()->get_cache_key( 'tracked_keywords_summary', Stats::get()->days . 'days' ) );
+	}
+	/**
 	 * Get track keywords count.
 	 *
 	 * @return int Total keywords count

@@ -50,7 +50,7 @@ class THWEPOF_Admin_Settings_Pro extends THWEPOF_Admin_Settings {
 			    <h2>Key Features of Extra Product Options for WooCommerce</h2>
 			    <p>The premium version of <b>Extra Product Options for WooCommerce plugin</b> offers a wide variety of advanced features that will help you to create the finest product pages in your store.</p>
 			    <ul class="feature-list star-list">
-			        <li>23 extra product fields</li>
+			        <li>26 extra product fields</li>
 			        <li>Display fields conditionally</li>
 			        <li>Display sections conditionally</li>
 			        <li>Custom validations</li>
@@ -103,6 +103,9 @@ class THWEPOF_Admin_Settings_Pro extends THWEPOF_Admin_Settings {
 			            <li>Image group</li>
 			            <li>Heading</li>
 			            <li>Label</li>
+			            <li>HTML</li>
+			            <li>Separator</li>
+			            <li>Switch</li>
 			        </ul>
 			    </div>
 			    <div class="th-flexbox-child th-nice-box">

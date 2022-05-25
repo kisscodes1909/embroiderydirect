@@ -74,6 +74,10 @@ class THWEPOF_Utils_Field {
 				return new WEPOF_Product_Field_DatePicker();
 			}else if($type === 'colorpicker'){
 				return new WEPOF_Product_Field_ColorPicker();
+			}else if($type === 'switch'){
+				return new WEPOF_Product_Field_Switch();
+			}else if($type === 'separator'){
+				return new WEPOF_Product_Field_Separator();
 			}else if($type === 'heading'){
 				return new WEPOF_Product_Field_Heading();
 			}else if($type === 'paragraph'){
@@ -278,6 +282,12 @@ class THWEPOF_Utils_Field {
 
 		}else if($field_type === 'paragraph'){
 			$field_html = self::get_html_paragraph($name, $field, $section, $value);
+
+		}else if($field_type === 'switch'){
+			$field_html = self::get_html_switch($name, $field, $section, $value);
+
+		}else if($field_type === 'separator'){
+			$field_html = self::get_html_separator($name, $field, $section, $value);
 		}
 		
 		return $field_html;
@@ -544,6 +554,10 @@ class THWEPOF_Utils_Field {
 		$checked = $field->get_property('checked') ? 'checked' : '';
 		$value = empty($value) ? '1' : $value;
 
+		if(isset($_POST[$name])){
+			$checked = isset($_POST[$name]) && $_POST[$name] == $value ? 'checked=checked' : 0;
+		}
+
 		$props = self::prepare_field_props($field, $name, $value);		
 		$input_html = '<input type="checkbox" '.$props.' '.$checked.'>';
 
@@ -645,6 +659,42 @@ class THWEPOF_Utils_Field {
 
 		$html = self::prepare_field_html_input($field, $section, $input_html);
 		return $html;
+	}
+
+	private static function get_html_switch($name, $field, $section, $value){
+		$checked = $field->get_property('checked') ? 'checked=checked' : '';
+		$value = $field->get_property('value') ? $field->get_property('value') : 1;
+
+		if(isset($_POST[$name])){
+			$checked = isset($_POST[$name]) && $_POST[$name] == $value ? 'checked=checked' : '';
+		}
+
+		$props = self::prepare_field_props($field, $name, $value);
+
+		$input_html  = '<div class="thwepof-switch-input">';
+		$input_html .= '<input type="hidden" name="'. esc_attr($name) .'" value="">';
+		$input_html .= '<input type="checkbox" '. $props . ' '. $checked. '/> ';
+		$input_html .= '<label for="'. esc_attr($name) .'" class="thwepof-switch-label"></label>';
+		$input_html .= '</div>';
+
+		$html = self::prepare_field_html_input($field, $section, $input_html);
+		return $html;
+		
+	}
+
+	private static function get_html_separator($name, $field, $section, $value){
+		$field_html = '';
+		$name = $field->get_property('name');
+		$field_id = $name ? 'id="'. $name .'"' : '';
+
+		$field_type = $field->get_property('type');
+		$wrapper_class = THWEPOF_Utils::convert_cssclass_string($field->get_property('cssclass'));
+		
+		$field_html  = '<tr class="'. $wrapper_class .' thwepof_' . esc_attr($field_type).'">';
+		$field_html .= '<td ' . $field_id. ' class="thwepof-seperator-td" colspan="2"><div class="thwepof-seperator"></div></td>';
+		$field_html .= '</tr>';
+	
+		return $field_html;
 	}
 	
 }

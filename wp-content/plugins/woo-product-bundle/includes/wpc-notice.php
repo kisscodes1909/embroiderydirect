@@ -16,7 +16,7 @@ if ( ! class_exists( 'WPCleverNotice' ) ) {
 		}
 
 		function notice_scripts() {
-			wp_enqueue_style( 'wpclever-notice', WOOSB_URI . 'assets/css/notice.css' );
+			wp_enqueue_style( 'wpc-notice', WOOSB_URI . 'assets/css/notice.css' );
 		}
 
 		function admin_notice() {

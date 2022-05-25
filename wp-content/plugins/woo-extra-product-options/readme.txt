@@ -1,18 +1,18 @@
-=== Extra Product Options (Product Addons) for WooCommerce ===
+=== Extra product options For WooCommerce | Custom Product Addons and Fields ===
 Contributors: ThemeHigh
 Donate link: https://themehigh.com/
 Tags: Woocommerce Product Addons, WooCommerce Extra product fields, woocommerce extra product options, Extra Product Options, WooCommerce Custom Product Fields, WooCommerce Product Field Editor, woocommerce product customizer, product form customizer, product, WooCommerce product, product form designer, custom, custom product fields, custom product option, custom options, customize product, customize variation, extra options, extra product options, form editor, price fields, prices, product, product choices, product price, woocommerce
 Requires at least: 4.9
 Tested up to: 5.9
 Requires PHP: 5.6
-Stable tag: 3.1.1
+Stable tag: 3.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Customize your product fields: Extra product Options for WooCommerce lets you add custom product addons (Fields) to your product pages.
+WooCommerce Extra Product Options plugin lets you add product addons (custom products field) of 17 different field types to your product page.
 
 == Description ==
-The WooCommerce Extra Product Options (WooCommerce Product Addons) plugin lets you add custom product fields(17 field types) and sections to your product page, making your WooCommerce product page more functional.
+The WooCommerce Extra Product Options (WooCommerce Product Addons) plugin lets you add custom product fields(19 field types) and sections to your product page, making your WooCommerce product page more functional.
 
 Custom product addons plugin helps you to minimize the effort to efficiently showcase the products you sell. Be it a smaller or bigger store serving niches from travel to fashion. You name it!
 
@@ -21,7 +21,7 @@ https://www.youtube.com/watch?v=YoVPQhdwuis
 --------------------------------------------
 
 = ☞ Custom Product Fields =
-Add advanced fields to the product page with Extra Product Options. 17 custom product fields help you to showcase a wider variety of products and options that work for almost every kind of WooCommerce store.
+Add advanced fields to the product page with Extra Product Options. 19 custom product fields help you to showcase a wider variety of products and options that work for almost every kind of WooCommerce store.
 
     1.  Text
     2.  Hidden
@@ -40,6 +40,9 @@ Add advanced fields to the product page with Extra Product Options. 17 custom pr
     15. Color Picker    
     16. Heading
     17. Paragraph
+    18. Switch
+    19. Separator
+
 
 = ☞ Custom Sections =
 Sections are used to group similar fields in a product page so that you can handle them with ease. You can create sections and display those at 2 predefined positions. They are;
@@ -104,7 +107,7 @@ In pro version. you can add sections (fields groups) at 3 predefined positions i
 
     1.  Before Add To Cart Button
     2.  After Add To Cart Button
-    3.  Before Variation Data (for variable products)
+    3.  Before Variation Price (for variable products)
 
 = ☞ Advanced Display Rules =
 More Conditions to Define ‘Display Rules': In the premium version, You can display the fields conditionally based on a number of new conditions to set up the ‘Display Rules’. You will be able to control the field display easily by adding different conditions based on the following;
@@ -250,6 +253,11 @@ Yes, it is compatible with Astra, Storefront. Also compatible with Avada, divi b
 17. Use html tags in field label.
 
 == Changelog ==
+= 3.1.2 =
+* Added new field type "Switch".
+* Added new field type "Separator".
+* Added WooCommerce 6.5.0 compatibility.
+
 = 3.1.1 =
 * Added new field type "Email".
 * Added new field type "URL".

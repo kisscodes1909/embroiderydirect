@@ -70,17 +70,18 @@
 
 /* Welcome Page */
 
-.wpclever_welcome_page {
+.wpclever_page {
     background-image: url('../images/wpc-bg.png');
     background-position: center;
     background-repeat: no-repeat;
 }
 
-.wpclever_welcome_page .card {
+.wpclever_page .card {
     border-color: #eee;
+    max-width: 100%;
 }
 
-.wpclever_welcome_page img {
+.wpclever_page img {
     max-width: 100%;
     height: auto;
 }
@@ -158,12 +159,36 @@
     border-bottom: 1px dashed #eee;
 }
 
+.wpclever_plugins_wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 .wpclever_plugins .item {
     border-bottom: 1px solid #eee;
     margin: 0;
     padding: 10px 0;
     display: inline-block;
-    width: 100%;
+    width: 25%;
+}
+
+@media only screen and (max-width: 1440px) {
+    .wpclever_plugins .item {
+        width: 33.33%;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .wpclever_plugins .item {
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .wpclever_plugins .item {
+        width: 100%;
+    }
 }
 
 .wpclever_plugins .item:hover {

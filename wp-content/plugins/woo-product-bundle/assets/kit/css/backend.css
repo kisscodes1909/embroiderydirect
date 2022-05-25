@@ -1,26 +1,26 @@
-.wpclever_settings_page .plugin-card-bottom.premium {
+.wpclever_essential_kit_page .plugin-card-bottom.premium {
     color: #999;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.wpclever_settings_page .plugin-card-bottom.premium strong {
+.wpclever_essential_kit_page .plugin-card-bottom.premium strong {
     color: #b05d93;
 }
 
-.wpclever_settings_page .plugin-card-bottom.premium a.activate-now,
-.wpclever_settings_page .plugin-card-bottom.premium a.deactivate-now {
+.wpclever_essential_kit_page .plugin-card-bottom.premium a.activate-now,
+.wpclever_essential_kit_page .plugin-card-bottom.premium a.deactivate-now {
     border-color: #b05d93;
 }
 
-.wpclever_settings_page .plugin-card-bottom.premium a.deactivate-now {
+.wpclever_essential_kit_page .plugin-card-bottom.premium a.deactivate-now {
     background-color: #b05d93;
     color: #b05d93;
 }
 
-.wpclever_settings_page a.activate-now,
-.wpclever_settings_page a.deactivate-now {
+.wpclever_essential_kit_page a.activate-now,
+.wpclever_essential_kit_page a.deactivate-now {
     position: relative;
     display: inline-block;
     border-radius: 12px;
@@ -43,13 +43,13 @@
     overflow: hidden;
 }
 
-.wpclever_settings_page a.deactivate-now {
+.wpclever_essential_kit_page a.deactivate-now {
     background-color: #0073aa;
     color: #0073aa;
 }
 
-.wpclever_settings_page a.activate-now:before, .wpclever_settings_page a.activate-now:after,
-.wpclever_settings_page a.deactivate-now:before, .wpclever_settings_page a.deactivate-now:after {
+.wpclever_essential_kit_page a.activate-now:before, .wpclever_essential_kit_page a.activate-now:after,
+.wpclever_essential_kit_page a.deactivate-now:before, .wpclever_essential_kit_page a.deactivate-now:after {
     position: absolute;
     display: block;
     content: "";
@@ -59,7 +59,7 @@
     transition: all .4s ease;
 }
 
-.wpclever_settings_page a.deactivate-now:after {
+.wpclever_essential_kit_page a.deactivate-now:after {
     right: 1px;
     left: auto;
     border-radius: 50%;
@@ -67,7 +67,7 @@
     transition: all .2s ease
 }
 
-.wpclever_settings_page a.activate-now:after {
+.wpclever_essential_kit_page a.activate-now:after {
     left: 1px;
     border-radius: 50%;
     background: #fff;

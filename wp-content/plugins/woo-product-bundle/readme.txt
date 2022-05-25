@@ -4,7 +4,7 @@ Donate link: https://wpclever.net
 Tags: woocommerce, woo, wpc, product, bundle, bundles
 Requires at least: 4.0
 Tested up to: 5.9
-Stable tag: 6.2.0
+Stable tag: 6.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,12 @@ If you love our plugins, please give us a full five-star rating so that we know 
 5. Almost done! click Save and see the result
 
 == Changelog ==
+
+= 6.2.2 =
+* Fixed: Filter hook 'woosb_item_visible'
+
+= 6.2.1 =
+* Fixed: Minor CSS/JS issue
 
 = 6.2.0 =
 * Updated: Optimized the code
@@ -249,7 +255,7 @@ If you love our plugins, please give us a full five-star rating so that we know 
 = 5.4.3 =
 * Updated: Compatible with WooCommerce 5.0
 * Updated: Optimized the code
-* Fixed: RTL support
+* Fixed: RTL support for better displaying right-to-left languages
 
 = 5.4.2 =
 * Fixed: Compatible with WPC Frequently Bought Together

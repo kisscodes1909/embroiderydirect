@@ -114,17 +114,13 @@ if ( ! class_exists( 'WPCleverWoosb' ) && class_exists( 'WC_Product' ) ) {
 			// Order
 			add_filter( 'woocommerce_get_item_count', [ $this, 'get_item_count' ], 10, 3 );
 
-			// Hide on cart & checkout page
-			if ( get_option( '_woosb_hide_bundled', 'no' ) !== 'no' ) {
-				add_filter( 'woocommerce_cart_item_visible', [ $this, 'cart_item_visible' ], 10, 2 );
-				add_filter( 'woocommerce_order_item_visible', [ $this, 'cart_item_visible' ], 10, 2 );
-				add_filter( 'woocommerce_checkout_cart_item_visible', [ $this, 'cart_item_visible' ], 10, 2 );
-			}
-
 			// Hide on mini-cart
-			if ( get_option( '_woosb_hide_bundled_mini_cart', 'no' ) === 'yes' ) {
-				add_filter( 'woocommerce_widget_cart_item_visible', [ $this, 'cart_item_visible' ], 10, 2 );
-			}
+			add_filter( 'woocommerce_widget_cart_item_visible', [ $this, 'mini_cart_item_visible' ], 10, 2 );
+
+			// Hide on cart & checkout page
+			add_filter( 'woocommerce_cart_item_visible', [ $this, 'cart_item_visible' ], 10, 2 );
+			add_filter( 'woocommerce_order_item_visible', [ $this, 'cart_item_visible' ], 10, 2 );
+			add_filter( 'woocommerce_checkout_cart_item_visible', [ $this, 'cart_item_visible' ], 10, 2 );
 
 			// Item class
 			if ( get_option( '_woosb_hide_bundled', 'no' ) !== 'yes' ) {
@@ -212,7 +208,7 @@ if ( ! class_exists( 'WPCleverWoosb' ) && class_exists( 'WC_Product' ) ) {
 
 		function admin_menu() {
 			add_submenu_page( 'wpclever', esc_html__( 'WPC Product Bundles', 'woo-product-bundle' ), esc_html__( 'Product Bundles', 'woo-product-bundle' ), 'manage_options', 'wpclever-woosb', array(
-				&$this,
+				$this,
 				'admin_menu_content'
 			) );
 		}
@@ -1018,7 +1014,7 @@ if ( ! class_exists( 'WPCleverWoosb' ) && class_exists( 'WC_Product' ) ) {
 			static $plugin;
 
 			if ( ! isset( $plugin ) ) {
-				$plugin = plugin_basename( WOOSB_DIR . '/' . basename( WOOSB_FILE ) );
+				$plugin = plugin_basename( WOOSB_FILE );
 			}
 
 			if ( $plugin === $file ) {
@@ -1034,7 +1030,7 @@ if ( ! class_exists( 'WPCleverWoosb' ) && class_exists( 'WC_Product' ) ) {
 			static $plugin;
 
 			if ( ! isset( $plugin ) ) {
-				$plugin = plugin_basename( WOOSB_DIR . '/' . basename( WOOSB_FILE ) );
+				$plugin = plugin_basename( WOOSB_FILE );
 			}
 
 			if ( $plugin === $file ) {
@@ -1491,8 +1487,31 @@ if ( ! class_exists( 'WPCleverWoosb' ) && class_exists( 'WC_Product' ) ) {
 			return $subtotal;
 		}
 
+		function mini_cart_item_visible( $visible, $cart_item ) {
+			if ( ! apply_filters( 'woosb_item_visible', true, $cart_item['data'] ) ) {
+				return false;
+			}
+
+			if ( isset( $cart_item['woosb_parent_id'] ) && ( get_option( '_woosb_hide_bundled_mini_cart', 'no' ) === 'yes' ) ) {
+				return false;
+			}
+
+			return $visible;
+		}
+
 		function cart_item_visible( $visible, $cart_item ) {
-			if ( isset( $cart_item['woosb_parent_id'] ) ) {
+			if ( method_exists( $cart_item, 'get_product' ) ) {
+				// for order item
+				$_product = $cart_item->get_product();
+			} else {
+				$_product = $cart_item['data'];
+			}
+
+			if ( ! apply_filters( 'woosb_item_visible', true, $_product ) ) {
+				return false;
+			}
+
+			if ( isset( $cart_item['woosb_parent_id'] ) && ( get_option( '_woosb_hide_bundled', 'no' ) !== 'no' ) ) {
 				return false;
 			}
 
@@ -1520,8 +1539,11 @@ if ( ! class_exists( 'WPCleverWoosb' ) && class_exists( 'WC_Product' ) ) {
 
 			if ( is_array( $items ) && ! empty( $items ) ) {
 				foreach ( $items as $item ) {
-					$_product    = wc_get_product( $item['id'] );
-					$items_str[] = apply_filters( 'woosb_order_bundled_product_name', $item['qty'] . ' × ' . $_product->get_name(), $item );
+					if ( ! apply_filters( 'woosb_item_visible', true, $item['id'], $cart_item['data'] ) ) {
+						continue;
+					}
+
+					$items_str[] = apply_filters( 'woosb_order_bundled_product_name', $item['qty'] . ' × ' . get_the_title( $item['id'] ), $item );
 				}
 			}
 
@@ -1541,6 +1563,10 @@ if ( ! class_exists( 'WPCleverWoosb' ) && class_exists( 'WC_Product' ) ) {
 
 				if ( is_array( $items ) && ! empty( $items ) ) {
 					foreach ( $items as $item ) {
+						if ( ! apply_filters( 'woosb_item_visible', true, $item['id'] ) ) {
+							continue;
+						}
+
 						$items_str[] = apply_filters( 'woosb_order_bundled_product_name', $item['qty'] . ' × ' . get_the_title( $item['id'] ), $item );
 					}
 				}
@@ -2521,7 +2547,7 @@ if ( ! class_exists( 'WPCleverWoosb' ) && class_exists( 'WC_Product' ) ) {
 							continue;
 						}
 
-						if ( ! apply_filters( 'woosb_item_visible', true, $_product, $product ) ) {
+						if ( ! apply_filters( 'woosb_item_exclude', true, $_product, $product ) ) {
 							continue;
 						}
 
@@ -2548,6 +2574,10 @@ if ( ! class_exists( 'WPCleverWoosb' ) && class_exists( 'WC_Product' ) ) {
 						}
 
 						$item_class = 'woosb-product';
+
+						if ( ! apply_filters( 'woosb_item_visible', true, $_product, $product ) ) {
+							$item_class .= ' woosb-product-hidden';
+						}
 
 						if ( ( ! $_product->is_in_stock() || ! $_product->has_enough_stock( $_qty ) || ! $_product->is_purchasable() ) && ( get_option( '_woosb_exclude_unpurchasable', 'no' ) === 'yes' ) ) {
 							$_qty       = 0;

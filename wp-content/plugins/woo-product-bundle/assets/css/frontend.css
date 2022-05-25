@@ -26,6 +26,10 @@
     border-bottom: 1px dotted #e5e5e5;
 }
 
+.woosb-products .woosb-product.woosb-product-hidden {
+    display: none;
+}
+
 .woosb-products .woosb-product.woosb-product-unpurchasable {
     display: none;
 }
