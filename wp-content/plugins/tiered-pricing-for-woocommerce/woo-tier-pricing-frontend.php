@@ -531,9 +531,10 @@ if ( 'enabled' === get_option( 'wtp_hide_price', 'disabled' ) && ! is_user_logge
 											$discount_value = wc_get_price_including_tax( $product, array( 'price' => $discount_value ) );
 										}										?>
 										<li data-min="<?php echo esc_attr( $min_qty ); ?>" data-max="<?php echo esc_attr( $data_max_qty ); ?>" data-price="<?php echo esc_attr( $discount_value ); ?>">
-											<span class="ma-quantity-range"><?php echo esc_attr( $min_qty ) . ' - ' . esc_attr( $max_qty ) . ' ' . esc_html__( apply_filters( 'wtp_change_tier_label', 'Items' ), 'wtp' ); ?></span>
+											<!-- <span class="ma-quantity-range"><?php echo esc_attr( $min_qty ) . ' - ' . esc_attr( $max_qty ) . ' ' . esc_html__( apply_filters( 'wtp_change_tier_label', 'Items' ), 'wtp' ); ?></span> -->
+											<span class="ma-quantity-range"><?php echo esc_attr( $min_qty ) . '+';?></span>
 											<span class="pre-inquiry-price"><?php echo wp_kses_post( wc_price( $discount_value ) ); ?></span>
-											<span class="save-value"><?php echo sprintf( '%1$s%2$s', esc_attr( number_format( $show_discount_percentage, 2 ) ), esc_html__( '% OFF', 'wtp' ) ); ?></span>
+											<span class="save-value wtp-save-off-label"><?php echo "Save ".number_format( $show_discount_percentage ) . "%" ?></span>
 										</li>
 										<?php
 									}
@@ -1352,3 +1353,14 @@ function wtp_calculator_product( $product_id, $price, $quantity, $type, $variati
 }
 // Add discount the price
 add_action('woocommerce_single_product_summary', 'wtp_product_discount_list_preview', 12);
+
+// Edit your color label
+// add_action('woocommerce_attribute_label', function($label, $name, $product){
+// 	if( $label !== 'Colour' ) return $label;
+// 	return 'Choose Colour';
+// }, 100, 3);
+
+
+remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20);
+
+add_action('woocommerce_before_single_product_summary', 'woocommerce_template_single_excerpt', 30);

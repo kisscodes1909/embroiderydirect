@@ -207,7 +207,6 @@ function wc_attribute_label( $name, $product = '' ) {
 	} else {
 		$label = $name;
 	}
-
 	return apply_filters( 'woocommerce_attribute_label', $label, $name, $product );
 }
 

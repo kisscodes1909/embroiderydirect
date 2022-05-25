@@ -28,7 +28,7 @@ div#wtp-discount-list-container ul:not(.wtp-table) li {
     display: flex;
     align-items: center;
     line-height: 2;
-    padding: 2%;
+    padding: 0 2% ;
     border: 2px dotted #a9a9a9;
     flex-wrap: wrap;
     justify-content: center;
@@ -170,15 +170,27 @@ div[data-tippy-root]:last-child {
 	font-weight:bold;
 }
 
-#paSizeUI input.pa-size-ui-item-qty {
-	width: 60px;
-	margin:0;
-}
-
 #paSizeUI {
 	margin-bottom: 20px
 }
 
+#paSizeUI .pa-size-ui-item .quantity {
+    margin:0;
+}
+
 .single_variation_wrap .thwepo-field {
     padding: 5px 0;
+}
+
+.wtp-save-off-label {
+    display: inline-block;
+    background-color:#FF9C0D;
+    color:#fff;
+    font-weight: bold;
+    padding:0 8px;
+    border-radius: 100px;
+}
+
+.product-gallery .product-short-description {
+    margin-top: 15px
 }

@@ -35,7 +35,7 @@ jQuery( function( $ ) {
 
             if(variations.length < 1) return '';
             
-            let html = '<div><label class="label">Size</label></div>';            
+            let html = '<div><label class="label">Sizes & Quantities</label></div>';            
         
             variations.map((variation) => {
                 html += this.variationElement(variation);
@@ -51,7 +51,11 @@ jQuery( function( $ ) {
             return `
             <div class='pa-size-ui-item'>
                 <div class='pa-size-ui-item-label'>${attribute_pa_size}</div>
-                <input min=0 class='pa-size-ui-item-qty' type="number" name=qtyNumber[${variation_id}]>
+                <div class='quantity buttons_added'>
+                    <input type="button" value="-" class="minus button is-form">
+                    <input value="0" min=0 step=1 class='pa-size-ui-item-qty input-text qty text' type="number" name=qtyNumber[${variation_id}]>
+                    <input type="button" value="+" class="plus button is-form">
+                </div>
             </div>`;
         }
 
@@ -85,36 +89,36 @@ jQuery( function( $ ) {
     
     new PASizeUI('paSizeUI');
 
-    $("#AddToCart").on('click', (e) => {
-        e.preventDefault();
+    // $("#AddToCart").on('click', (e) => {
+    //     e.preventDefault();
 
-        $form = $('.variations_form');
-        const productID = $form.data('product_id');
-        // {$form.serialize(), data: 'wtp_add_to_cart'}
+    //     $form = $('.variations_form');
+    //     const productID = $form.data('product_id');
+    //     // {$form.serialize(), data: 'wtp_add_to_cart'}
 
-        $.ajax({
-            type:		'POST',
-            url:		wtp_PaSize_script.ajaxurl,
-            data:		$form.serialize() + `&action=wtp_add_to_cart&product_id=${productID}`,
-            dataType:   'json',
-            success:	function( response ) {
-                if ( ! response ) {
-                    return;
-                }
+    //     $.ajax({
+    //         type:		'POST',
+    //         url:		wtp_PaSize_script.ajaxurl,
+    //         data:		$form.serialize() + `&action=wtp_add_to_cart&product_id=${productID}`,
+    //         dataType:   'json',
+    //         success:	function( response ) {
+    //             if ( ! response ) {
+    //                 return;
+    //             }
 
-                if ( response.error && response.product_url ) {
-                    window.location = response.product_url;
-                    return;
-                }
+    //             if ( response.error && response.product_url ) {
+    //                 window.location = response.product_url;
+    //                 return;
+    //             }
 
-                // Redirect to cart option
-                window.location = wc_add_to_cart_params.cart_url;
-            },
-            error:	function( jqXHR, textStatus, errorThrown ) {
+    //             // Redirect to cart option
+    //             window.location = wc_add_to_cart_params.cart_url;
+    //         },
+    //         error:	function( jqXHR, textStatus, errorThrown ) {
            
-            }
-        });
-    });
+    //         }
+    //     });
+    // });
 
 
 });
