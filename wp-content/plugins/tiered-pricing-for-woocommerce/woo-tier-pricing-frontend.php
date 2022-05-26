@@ -1355,10 +1355,10 @@ function wtp_calculator_product( $product_id, $price, $quantity, $type, $variati
 add_action('woocommerce_single_product_summary', 'wtp_product_discount_list_preview', 12);
 
 // Edit your color label
-// add_action('woocommerce_attribute_label', function($label, $name, $product){
-// 	if( $label !== 'Colour' ) return $label;
-// 	return 'Choose Colour';
-// }, 100, 3);
+add_action('woocommerce_attribute_label', function($label, $name, $product){
+	if( $label !== 'Colour' ) return $label;
+	return 'Choose Colour';
+}, 100, 3);
 
 
 remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20);

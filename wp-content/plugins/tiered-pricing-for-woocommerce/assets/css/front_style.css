@@ -15,13 +15,14 @@ div#wtp-discount-list-container h4 {
     color: inherit;
     font-family: inherit;
 }
+
 div#wtp-discount-list-container ul:not(.wtp-table) {
     padding: 0;
     list-style-type: none;
     display: flex;
     margin: 1% 0;
-    /* justify-content: space-between; */
     width: 100%;
+    flex-direction: column;
 }
 
 div#wtp-discount-list-container ul:not(.wtp-table) li {
@@ -32,8 +33,45 @@ div#wtp-discount-list-container ul:not(.wtp-table) li {
     border: 2px dotted #a9a9a9;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 0 0.5%;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin:0;
+    height: 50px;
+}
+
+div#wtp-discount-list-container ul:not(.wtp-table) li > span {
+    display:block;
+    line-height: 1.5rem;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+div#wtp-discount-list-container ul:not(.wtp-table) li + li {
+    margin-top: 5px;
+}
+
+@media all and (min-width: 768px) {
+    div#wtp-discount-list-container ul:not(.wtp-table) {
+        flex-direction: row;
+    }
+    
+    div#wtp-discount-list-container ul:not(.wtp-table) li {
+        flex-direction: column;
+        margin: 0 0.5%;
+        height: auto;
+    }
+
+    div#wtp-discount-list-container ul:not(.wtp-table) li > span {
+        display:block;
+        line-height: 1.5rem;
+        margin-bottom: 5px;
+        font-size: 0.8em;
+    }
+
+    div#wtp-discount-list-container ul:not(.wtp-table) li + li {
+        margin-top:0;
+    }
 }
 div#wtp-discount-list-container ul li.wtp-selected {
    /*  box-shadow: 1px 1px 5px 2px #ddd;
@@ -57,12 +95,7 @@ div#wtp-discount-list-container ul li.wtp-selected {
 .tippy-box div#wtp-discount-list-container {
     margin:  0;
 }
-div#wtp-discount-list-container ul:not(.wtp-table) li > span {
-    display:block;
-    line-height: 1.5rem;
-    margin-bottom: 5px;
-    font-size: 0.8em;
-}
+
 div#wtp-discount-list-container ul li > span.pre-inquiry-price {
     font-size: 1.575rem;
     /* color: #fd390a; */
