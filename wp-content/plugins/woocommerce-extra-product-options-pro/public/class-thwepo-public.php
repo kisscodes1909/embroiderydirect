@@ -962,15 +962,19 @@ class THWEPO_Public {
 	private function prepare_extra_cart_item_data(){
 		$extra_data = array();
 		$extra_options = $this->prepare_product_options(false);
-		
+
 		if($extra_options){
 			foreach($extra_options as $name => $field){
 				$type = $field->get_property('type');
 				$posted_value = false;
 				
 				if($type === 'file'){
-					if(isset($_FILES[$name])){
+
+					$posted_value = apply_filters("thwepo_file_{$field->name}_value", '', $field, $extra_options);
+
+					if(isset($_FILES[$name]) && empty($posted_value) ){
 						$file = $_FILES[$name];
+
 						if( $field->get_property('multiple_file') === 'yes' ){
 							$posted_files = [];
 							if( isset( $file['name'] ) && is_array( $file['name'] ) ){
@@ -991,6 +995,10 @@ class THWEPO_Public {
 							}
 						}
 					}
+
+					// Save upload to global variable and reusable
+					global $thwepo_files;
+					$thwepo_files[$field->name] = $posted_value;
 				}else{
 					$posted_value = $this->get_posted_value($name, $field->get_property('type'));
 				}
@@ -1038,7 +1046,9 @@ class THWEPO_Public {
 				}
 			}
 		}
+
 		$extra_data = apply_filters('thwepo_extra_cart_item_data', $extra_data);
+
 		return $extra_data;
 	}
 

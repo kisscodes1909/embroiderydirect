@@ -1080,7 +1080,7 @@ function getParentProductQuantities($cartItemQuantities) {
 	$productQuantities = [];
 
 	foreach($cartItemQuantities as $product_id => $quantity) {
-		$product           = wc_get_product( $product_id );
+		$product  = wc_get_product( $product_id );
 		
 		// Calculate parent quantity product
 		if ( $product && 'variation' === $product->get_type() ) {
@@ -1364,3 +1364,17 @@ add_action('woocommerce_attribute_label', function($label, $name, $product){
 remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20);
 
 add_action('woocommerce_before_single_product_summary', 'woocommerce_template_single_excerpt', 30);
+
+// Prevent multiple upload
+add_filter('thwepo_file_upload_logo_value', function($field, $extra_options){
+	global $thwepo_files;
+	
+	list('upload_logo' => $upload_logo) = $thwepo_files;
+
+	if($upload_logo) {
+		return $upload_logo;
+	}
+
+	return '';
+}, 100, 2);
+
