@@ -1378,3 +1378,8 @@ add_filter('thwepo_file_upload_logo_value', function($field, $extra_options){
 	return '';
 }, 100, 2);
 
+add_action('woocommerce_after_calculate_totals', function($cart) {
+	if($cart->get_subtotal() > 200) {
+		$cart->fees_api()->remove_all_fees();
+	}
+});
