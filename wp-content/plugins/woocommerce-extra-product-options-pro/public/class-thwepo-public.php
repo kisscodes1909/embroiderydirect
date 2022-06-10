@@ -970,7 +970,7 @@ class THWEPO_Public {
 				
 				if($type === 'file'){
 
-					$posted_value = apply_filters("thwepo_file_{$field->name}_value", '', $field, $extra_options);
+					$posted_value = apply_filters("thwepo_file_{$field->name}_value", $posted_value, $field, $extra_options);
 
 					if(isset($_FILES[$name]) && empty($posted_value) ){
 						$file = $_FILES[$name];

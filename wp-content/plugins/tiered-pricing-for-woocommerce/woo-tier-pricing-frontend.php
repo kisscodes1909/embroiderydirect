@@ -1363,17 +1363,20 @@ remove_action('woocommerce_single_product_summary', 'woocommerce_template_single
 add_action('woocommerce_before_single_product_summary', 'woocommerce_template_single_excerpt', 30);
 
 // Prevent multiple upload
-add_filter('thwepo_file_upload_logo_value', function($field, $extra_options){
+add_filter('thwepo_file_upload_logo_value', 'prevent_multiple_upload', 100, 3);
+add_filter('thwepo_file_second_upload_logo_value', 'prevent_multiple_upload', 100, 3);
+
+
+function prevent_multiple_upload($posted_value, $field, $extra_options) {
 	global $thwepo_files;
 	
-	list('upload_logo' => $upload_logo) = $thwepo_files;
 
-	if($upload_logo) {
-		return $upload_logo;
+	if( isset($thwepo_files[$field->name]) ) {
+		return $thwepo_files[$field->name];
 	}
 
-	return '';
-}, 100, 2);
+	return $posted_value;
+}
 
 // Discount for logo setup fee
 add_action('woocommerce_after_calculate_totals', function($cart) {
@@ -1397,34 +1400,39 @@ function recalculate_logo_fee( $cart ) {
 		return;
 	}
 
-	$totalPositionLogoFee = 0;
+	$logoFee = 0;
 
 	// LOOP THROUGH CART ITEMS & APPLY DISCOUNT.
 	foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
-
-		$totalPositionLogoFee += calPositionLogoFee($cart_item);
+		$logoFee += calLogoItemFee($cart_item);
 	}
 
-	$cart->add_fee('Logo Position Fee', $totalPositionLogoFee);
+	$cart->add_fee('Logo Position Fee', $logoFee);
 }
 
-function calPositionLogoFee($item) {
+function calLogoItemFee($item) {
 
 	list('thwepo_options' => $thwepo_options) = $item;
-
-	$logo_position = array_filter($thwepo_options, function($options){
+ 
+	// We can have 2 logo on each item
+	$logos = array_filter($thwepo_options, function($options){
 		if( $options['label'] === 'Choose Logo Position' ) return $options;
 	});
 
-	$logo_position = array_pop($logo_position);
+	// Loop through each logo and calculate
 
-	// $5 on each position
-	$costPerLogo = 5; 
+	$totalFees = 0;
 
-	// Find total position
-	$totalPosition = count($logo_position['value']);
+	foreach($logos as $logo) {
+		$totalPosition = count($logo['value']);
+		$totalFees += calPositionLogoFee($totalPosition) * $item['quantity'];
+	}
+	
+	return $totalFees;
+}
 
-	return $item['quantity'] * $costPerLogo * $totalPosition;
+function calPositionLogoFee($totalPositionPerItem, $costPerPosition = 5) {
+	return $totalPositionPerItem * $costPerPosition;
 }
 
 
