@@ -1071,9 +1071,6 @@ function wtp_product_alter_price_cart( $cart ) {
 			$cart_item['data']->set_price( $price );
 		}
 	}
-
-
-
 }
 
 function getParentProductQuantities($cartItemQuantities) {
@@ -1378,8 +1375,56 @@ add_filter('thwepo_file_upload_logo_value', function($field, $extra_options){
 	return '';
 }, 100, 2);
 
+// Discount for logo setup fee
 add_action('woocommerce_after_calculate_totals', function($cart) {
 	if($cart->get_subtotal() > 200) {
-		$cart->fees_api()->remove_all_fees();
+		$fees = $cart->fees_api()->get_fees();
+		unset($fees['choose-logo-setup']);
+		$cart->fees_api()->set_fees($fees);
 	}
 });
+
+
+
+add_action( 'woocommerce_before_calculate_totals', 'recalculate_logo_fee', 100 );
+function recalculate_logo_fee( $cart ) {
+
+	if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+		return;
+	}
+
+	if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
+		return;
+	}
+
+	$totalPositionLogoFee = 0;
+
+	// LOOP THROUGH CART ITEMS & APPLY DISCOUNT.
+	foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+
+		$totalPositionLogoFee += calPositionLogoFee($cart_item);
+	}
+
+	$cart->add_fee('Logo Position Fee', $totalPositionLogoFee);
+}
+
+function calPositionLogoFee($item) {
+
+	list('thwepo_options' => $thwepo_options) = $item;
+
+	$logo_position = array_filter($thwepo_options, function($options){
+		if( $options['label'] === 'Choose Logo Position' ) return $options;
+	});
+
+	$logo_position = array_pop($logo_position);
+
+	// $5 on each position
+	$costPerLogo = 5; 
+
+	// Find total position
+	$totalPosition = count($logo_position['value']);
+
+	return $item['quantity'] * $costPerLogo * $totalPosition;
+}
+
+
