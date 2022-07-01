@@ -185,17 +185,19 @@ function ux_col($atts, $content = null) {
 		),
 	);
 
+	$col_inner = $sticky ? '> .is-sticky-column > .is-sticky-column__inner > .col-inner' : '> .col-inner';
+
 	$args = array(
 		'padding'   => array(
-			'selector' => '> .col-inner',
+			'selector' => $col_inner,
 			'property' => 'padding',
 		),
 		'margin'    => array(
-			'selector' => '> .col-inner',
+			'selector' => $col_inner,
 			'property' => 'margin',
 		),
 		'bg_radius' => array(
-			'selector' => '> .col-inner',
+			'selector' => $col_inner,
 			'property' => 'border-radius',
 			'unit'     => 'px',
 		),
