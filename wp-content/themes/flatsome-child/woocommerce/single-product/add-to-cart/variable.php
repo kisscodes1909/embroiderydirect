@@ -31,9 +31,14 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 	<?php if ( empty( $available_variations ) && false !== $available_variations ) : ?>
 		<p class="stock out-of-stock"><?php echo esc_html( apply_filters( 'woocommerce_out_of_stock_message', __( 'This product is currently out of stock and unavailable.', 'woocommerce' ) ) ); ?></p>
 	<?php else : ?>
+		<?php
+		// Attribute slugs are configured in the child theme integration file.
+		$colour_attribute = defined( 'ED_COLOUR_ATTRIBUTE' ) ? ED_COLOUR_ATTRIBUTE : 'pa_colour';
+		$size_attribute   = defined( 'ED_SIZE_ATTRIBUTE' ) ? ED_SIZE_ATTRIBUTE : 'pa_size';
+		?>
 		<div class="variations" cellspacing="0">
 			<?php foreach ( $attributes as $attribute_name => $options ) : ?>
-				<?php if($attribute_name === 'pa_colour'): ?>
+				<?php if ( $attribute_name === $colour_attribute ) : ?>
 					<div class="variation-ui">
 						<label class="label"><label for="<?php echo esc_attr( sanitize_title( $attribute_name ) ); ?>"><?php echo wc_attribute_label( $attribute_name ); // WPCS: XSS ok. ?></label></label>
 						<div class="value">
@@ -53,7 +58,7 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 			<?php endforeach; ?>
 		</div>
 
-		<div id='paSizeUI' data-size='<?php echo wp_json_encode($attributes['pa_size']);  ?>'></div>
+			<div id="paSizeUI" data-size="<?php echo esc_attr( wp_json_encode( $attributes[ $size_attribute ] ?? array() ) ); ?>"></div>
 		
 		<?php do_action( 'woocommerce_after_variations_table' ); ?>
 

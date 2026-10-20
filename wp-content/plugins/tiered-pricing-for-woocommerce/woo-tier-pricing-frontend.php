@@ -44,15 +44,8 @@ function wtp_front_scripts() {
 			'summary' => get_option( 'wtp_summary_display_type', 'none' )
 		);
 		//wp_register_script( 'wtp-front-script', WTP_ROOT_URL . 'assets/js/front_script.js', array( 'jquery', 'wtp-tippy' ), '1.0.0&t=' . gmdate( 'dmYhis' ), true );
-		wp_register_script( 'wtp-PaSize', WTP_ROOT_URL . 'assets/js/frontPaSize.js', array( 'jquery' ), '1.0.0&t=' . gmdate( 'dmYhis' ), true );
-
 		//wp_localize_script( 'wtp-front-script', 'wtp_front_script', $params );
-
-		wp_localize_script( 'wtp-PaSize', 'wtp_PaSize_script', $params );
-
-
 		//wp_enqueue_script( 'wtp-front-script' );
-		wp_enqueue_script( 'wtp-PaSize' );
 
 
 	}
@@ -1045,8 +1038,6 @@ function wtp_product_alter_price_cart( $cart ) {
 		return;
 	}
 
-	$parentProductQuantities = getParentProductQuantities($cart->get_cart_item_quantities());
-
 	// LOOP THROUGH CART ITEMS & APPLY DISCOUNT.
 	foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
 		$product      = $cart_item['data'];
@@ -1054,14 +1045,9 @@ function wtp_product_alter_price_cart( $cart ) {
 		$variation_id = $cart_item['variation_id'];
 		$price        = $product->get_price();
 		$type         = $product->get_type();
-		//$quantity     = $cart_item['quantity'];
-
-		// Apply total variation product quantity 
-		$quantity     = $parentProductQuantities[$product_id];
+		$quantity     = $cart_item['quantity'];
 
 		$new_price    = (string) wtp_calculator_product( $product_id, $price, $quantity, $type, $variation_id );
-
-		//$new_price = 5;
 
 		if ( '' != $new_price ) {
 			$cart_item['data']->set_price( $new_price );
@@ -1072,25 +1058,6 @@ function wtp_product_alter_price_cart( $cart ) {
 		}
 	}
 }
-
-function getParentProductQuantities($cartItemQuantities) {
-	$productQuantities = [];
-
-	foreach($cartItemQuantities as $product_id => $quantity) {
-		$product  = wc_get_product( $product_id );
-		
-		// Calculate parent quantity product
-		if ( $product && 'variation' === $product->get_type() ) {
-			$productQuantities[$product->get_parent_id()] = $productQuantities[$product->get_parent_id()] + $quantity;
-		} else {
-			$productQuantities[$product_id] = $quantity;
-		}
-
-	}
-	return $productQuantities;
-}
-
-// totalQty(WC()->cart->get_cart_item_quantities());
 
 
 
@@ -1348,91 +1315,3 @@ function wtp_calculator_product( $product_id, $price, $quantity, $type, $variati
 		}
 	}
 }
-// Add discount the price
-add_action('woocommerce_single_product_summary', 'wtp_product_discount_list_preview', 12);
-
-// Edit your color label
-add_action('woocommerce_attribute_label', function($label, $name, $product){
-	if( $label !== 'Colour' ) return $label;
-	return 'Choose Colour';
-}, 100, 3);
-
-
-remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20);
-
-add_action('woocommerce_before_single_product_summary', 'woocommerce_template_single_excerpt', 30);
-
-// Prevent multiple upload
-add_filter('thwepo_file_upload_logo_value', 'prevent_multiple_upload', 100, 3);
-add_filter('thwepo_file_second_upload_logo_value', 'prevent_multiple_upload', 100, 3);
-
-
-function prevent_multiple_upload($posted_value, $field, $extra_options) {
-	global $thwepo_files;
-	
-
-	if( isset($thwepo_files[$field->name]) ) {
-		return $thwepo_files[$field->name];
-	}
-
-	return $posted_value;
-}
-
-// Discount for logo setup fee
-add_action('woocommerce_after_calculate_totals', function($cart) {
-	if($cart->get_subtotal() > 200) {
-		$fees = $cart->fees_api()->get_fees();
-		unset($fees['choose-logo-setup']);
-		$cart->fees_api()->set_fees($fees);
-	}
-});
-
-
-
-add_action( 'woocommerce_before_calculate_totals', 'recalculate_logo_fee', 100 );
-function recalculate_logo_fee( $cart ) {
-
-	if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
-		return;
-	}
-
-	if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
-		return;
-	}
-
-	$logoFee = 0;
-
-	// LOOP THROUGH CART ITEMS & APPLY DISCOUNT.
-	foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
-		$logoFee += calLogoItemFee($cart_item);
-	}
-
-	$cart->add_fee('Logo Position Fee', $logoFee);
-}
-
-function calLogoItemFee($item) {
-
-	list('thwepo_options' => $thwepo_options) = $item;
- 
-	// We can have 2 logo on each item
-	$logos = array_filter($thwepo_options, function($options){
-		if( $options['label'] === 'Choose Logo Position' ) return $options;
-	});
-
-	// Loop through each logo and calculate
-
-	$totalFees = 0;
-
-	foreach($logos as $logo) {
-		$totalPosition = count($logo['value']);
-		$totalFees += calPositionLogoFee($totalPosition) * $item['quantity'];
-	}
-	
-	return $totalFees;
-}
-
-function calPositionLogoFee($totalPositionPerItem, $costPerPosition = 5) {
-	return $totalPositionPerItem * $costPerPosition;
-}
-
-
