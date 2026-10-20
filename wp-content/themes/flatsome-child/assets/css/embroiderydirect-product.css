@@ -519,6 +519,32 @@
 	transform: translateY(-1px);
 }
 
+.single-product .single_add_to_cart_button.is-loading {
+	cursor: wait;
+	opacity: .72;
+}
+
+.single-product .ed-cart-status {
+	margin-top: 10px;
+	padding: 10px 12px;
+	border-radius: 9px;
+	font-size: 13px;
+	font-weight: 650;
+	line-height: 1.35;
+}
+
+.single-product .ed-cart-status.is-success {
+	border: 1px solid rgba(29, 122, 90, .22);
+	background: #e7f4ef;
+	color: var(--ed-success);
+}
+
+.single-product .ed-cart-status.is-error {
+	border: 1px solid rgba(180, 55, 45, .2);
+	background: #fff1ef;
+	color: #9f3028;
+}
+
 /** Tier-pricing saving badge. */
 .wtp-save-off-label {
 	display: inline-block;

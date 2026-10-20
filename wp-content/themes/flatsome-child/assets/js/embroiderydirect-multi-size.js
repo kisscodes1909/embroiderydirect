@@ -28,6 +28,7 @@
 			this.element.addEventListener( 'input', () => this.updateTotal() );
 			this.element.addEventListener( 'change', () => this.updateTotal() );
 			this.element.addEventListener( 'click', () => window.setTimeout( () => this.updateTotal(), 0 ) );
+			this.formElement.on( 'submit.edMultiSizeAjax', event => this.submit( event ) );
 		}
 
 		hasVariationPayload( form ) {
@@ -112,7 +113,65 @@
 
 			output.text( `${ total } ${ total === 1 ? 'item' : 'items' }` );
 			output.toggleClass( 'has-items', total > 0 );
+			const button = this.formElement.find( '.single_add_to_cart_button' ).first();
+			button.prop( 'disabled', total < 1 ).attr( 'aria-disabled', total < 1 ? 'true' : 'false' );
+			if ( total > 0 ) {
+				button.removeClass( 'disabled wc-variation-selection-needed wc-variation-is-unavailable' );
+			}
 			this.updateTierHighlight( total );
+		}
+
+		showStatus( message, type = 'error' ) {
+			let status = this.formElement.find( '.ed-cart-status' );
+			if ( ! status.length ) {
+				status = $( '<div class="ed-cart-status" role="status" aria-live="polite"></div>' );
+				this.formElement.find( '.single_add_to_cart_button' ).first().after( status );
+			}
+			status.removeClass( 'is-error is-success' ).addClass( `is-${ type }` ).text( message );
+		}
+
+		submit( event ) {
+			event.preventDefault();
+			const inputs = this.formElement.find( '.pa-size-ui-item-qty' );
+			const total = inputs.toArray().reduce(
+				( sum, input ) => sum + Math.max( 0, Number.parseInt( input.value, 10 ) || 0 ),
+				0
+			);
+			if ( total < 1 ) {
+				this.showStatus( config.emptyMessage || 'Choose a quantity for at least one size.' );
+				return;
+			}
+
+			const button = this.formElement.find( '.single_add_to_cart_button' ).first();
+			const originalLabel = button.text();
+			const data = new FormData( this.formElement.get( 0 ) );
+			data.set( 'action', 'ed_multi_size_add_to_cart' );
+			data.set( 'nonce', config.ajaxNonce || '' );
+			button.prop( 'disabled', true ).addClass( 'is-loading' ).text( config.addingLabel || 'Adding…' );
+
+			$.ajax( {
+				url: config.ajaxUrl,
+				type: 'POST',
+				data,
+				processData: false,
+				contentType: false,
+			} ).done( response => {
+				if ( ! response || ! response.fragments ) {
+					const responseMessage = response && response.data ? response.data.message : '';
+					this.showStatus( responseMessage || config.errorMessage || 'Could not add these items.' );
+					return;
+				}
+				$( document.body ).trigger( 'added_to_cart', [ response.fragments, response.cart_hash, button ] );
+				inputs.val( 0 );
+				this.updateTotal();
+				this.showStatus( response.message || config.addedLabel || 'Added to cart', 'success' );
+			} ).fail( xhr => {
+				const errorMessage = xhr.responseJSON && xhr.responseJSON.data ? xhr.responseJSON.data.message : '';
+				this.showStatus( errorMessage || config.errorMessage || 'Could not add these items.' );
+			} ).always( () => {
+				button.removeClass( 'is-loading' ).text( originalLabel );
+				this.updateTotal();
+			} );
 		}
 
 		updateTierHighlight( total ) {

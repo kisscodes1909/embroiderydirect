@@ -50,6 +50,99 @@ function ed_enqueue_multi_size_assets() {
 			'colourAttribute' => ED_COLOUR_ATTRIBUTE,
 			'sizeAttribute'   => ED_SIZE_ATTRIBUTE,
 			'sizesLabel'      => __( 'Sizes & Quantities', 'flatsome-child' ),
+			'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
+			'ajaxNonce'       => wp_create_nonce( 'ed_multi_size_add_to_cart' ),
+			'addingLabel'     => __( 'Adding…', 'flatsome-child' ),
+			'addedLabel'      => __( 'Added to cart', 'flatsome-child' ),
+			'emptyMessage'    => __( 'Choose a quantity for at least one size.', 'flatsome-child' ),
+			'errorMessage'    => __( 'Could not add these items. Please try again.', 'flatsome-child' ),
+		)
+	);
+}
+
+/** Add all selected size variations and return WooCommerce cart fragments. */
+add_action( 'wp_ajax_ed_multi_size_add_to_cart', 'ed_ajax_multi_size_add_to_cart' );
+add_action( 'wp_ajax_nopriv_ed_multi_size_add_to_cart', 'ed_ajax_multi_size_add_to_cart' );
+
+function ed_ajax_multi_size_add_to_cart() {
+	check_ajax_referer( 'ed_multi_size_add_to_cart', 'nonce' );
+
+	$product_id = isset( $_POST['product_id'] ) ? absint( wp_unslash( $_POST['product_id'] ) ) : 0;
+	$quantities = isset( $_POST['qtyNumber'] ) && is_array( $_POST['qtyNumber'] )
+		? wc_clean( wp_unslash( $_POST['qtyNumber'] ) )
+		: array();
+	$added      = 0;
+
+	if ( ! $product_id || empty( $quantities ) ) {
+		wp_send_json_error( array( 'message' => __( 'Choose a quantity for at least one size.', 'flatsome-child' ) ), 400 );
+	}
+
+	foreach ( $quantities as $variation_id => $raw_quantity ) {
+		$variation_id = absint( $variation_id );
+		$quantity     = wc_stock_amount( $raw_quantity );
+
+		if ( $quantity < 1 ) {
+			continue;
+		}
+
+		$variation = wc_get_product( $variation_id );
+		if ( ! $variation || ! $variation->is_type( 'variation' ) || $product_id !== $variation->get_parent_id() ) {
+			wp_send_json_error( array( 'message' => __( 'One of the selected sizes is invalid.', 'flatsome-child' ) ), 400 );
+		}
+
+		$passed_validation = apply_filters(
+			'woocommerce_add_to_cart_validation',
+			true,
+			$product_id,
+			$quantity,
+			$variation_id,
+			$variation->get_variation_attributes()
+		);
+
+		if ( ! $passed_validation ) {
+			continue;
+		}
+
+		$cart_item_key = WC()->cart->add_to_cart(
+			$product_id,
+			$quantity,
+			$variation_id,
+			$variation->get_variation_attributes()
+		);
+
+		if ( $cart_item_key ) {
+			$added += $quantity;
+		}
+	}
+
+	if ( $added < 1 ) {
+		$message = wc_notice_count( 'error' )
+			? wp_strip_all_tags( wc_print_notices( true ) )
+			: __( 'Could not add these items to the cart.', 'flatsome-child' );
+		wp_send_json_error( array( 'message' => $message ), 400 );
+	}
+
+	WC()->cart->calculate_totals();
+	ob_start();
+	woocommerce_mini_cart();
+	$mini_cart = ob_get_clean();
+	$fragments = apply_filters(
+		'woocommerce_add_to_cart_fragments',
+		array(
+			'div.widget_shopping_cart_content' => '<div class="widget_shopping_cart_content">' . $mini_cart . '</div>',
+		)
+	);
+
+	wp_send_json(
+		array(
+			'fragments' => $fragments,
+			'cart_hash' => WC()->cart->get_cart_hash(),
+			'count'     => $added,
+			'message'   => sprintf(
+				/* translators: %d: number of items added. */
+				_n( '%d item added to your cart.', '%d items added to your cart.', $added, 'flatsome-child' ),
+				$added
+			),
 		)
 	);
 }
